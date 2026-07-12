@@ -23,7 +23,7 @@ api_key = os.getenv("GOOGLE_API_KEY")
 app = FastAPI()
 
 vector_store = None
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=api_key)
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
 
 
