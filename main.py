@@ -23,11 +23,11 @@ api_key = os.getenv("GOOGLE_API_KEY")
 app = FastAPI()
 
 vector_store = None
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=api_key)
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key)
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
 
 
-@tool
+@tool(description="Perform a basic arithmetic operation (add, sub, mul, div) on two numbers.")
 def calculator(first_num: float, second_num: float, operation: str) -> dict:
     try:
         if operation == "add":
@@ -47,7 +47,7 @@ def calculator(first_num: float, second_num: float, operation: str) -> dict:
     except Exception as e:
         return {"error": str(e)}
 
-@tool
+@tool(description="Search the uploaded business menu and policy PDF document for rules and context.")
 def document_search(query: str) -> str:
     global vector_store
     if not vector_store:
