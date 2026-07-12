@@ -1,5 +1,6 @@
 import io
 import sqlite3
+import os
 from typing import TypedDict, Annotated
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from pydantic import BaseModel
@@ -17,11 +18,13 @@ from langgraph.prebuilt import ToolNode, tools_condition
 
 load_dotenv()
 
+api_key = os.getenv("GOOGLE_API_KEY")
+
 app = FastAPI()
 
 vector_store = None
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=api_key)
+embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
 
 
 @tool
