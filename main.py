@@ -1,18 +1,17 @@
 import io
-import sqlite3
 import os
 from typing import TypedDict, Annotated
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import PyPDF2
+from langgraph.checkpoint.memory import MemorySaver
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_core.messages import BaseMessage, HumanMessage
 from langchain_core.tools import tool
 from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langgraph.graph import StateGraph, START, END
-from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 
@@ -68,9 +67,7 @@ def chat_node(state: ChatState):
 
 tool_node = ToolNode(tools)
 
-conn = sqlite3.connect(database="event_manager.db", check_same_thread=False)
-checkpointer = SqliteSaver(conn=conn)
-
+checkpointer = MemorySaver()
 graph = StateGraph(ChatState)
 graph.add_node("chat_node", chat_node)
 graph.add_node("tools", tool_node)
