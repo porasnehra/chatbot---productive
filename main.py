@@ -5,13 +5,11 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import PyPDF2
-
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_core.messages import BaseMessage, HumanMessage
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.tools import tool
 from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph.message import add_messages
@@ -22,8 +20,9 @@ load_dotenv()
 app = FastAPI()
 
 vector_store = None
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
-llm = ChatOpenAI(model="gpt-4o")
 
 @tool
 def calculator(first_num: float, second_num: float, operation: str) -> dict:
@@ -97,7 +96,6 @@ async def upload_pdf(file: UploadFile = File(...)):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = text_splitter.split_text(text)
     
-    embeddings = OpenAIEmbeddings()
     vector_store = FAISS.from_texts(chunks, embeddings)
     
     return {"status": "success", "message": "Policy document processed and ready for queries."}
