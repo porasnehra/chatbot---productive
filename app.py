@@ -20,7 +20,7 @@ with st.sidebar:
         if uploaded_file is not None:
             files = {"file": (uploaded_file.name, uploaded_file.getvalue(), "application/pdf")}
             with st.spinner("Processing PDF..."):
-                res = requests.post("http://127.0.0.1:8000/upload_pdf", files=files)
+                res = requests.post("https://chatbot-productive.onrender.com/upload_pdf", files=files)
             if res.status_code == 200:
                 st.success("Document uploaded and indexed successfully!")
             else:
@@ -45,7 +45,7 @@ if user_input:
             "message": user_input
         }
         with st.spinner("Calculating & Checking Policies..."):
-            res = requests.post("http://127.0.0.1:8000/chat", json=payload)
+            res = requests.post("https://chatbot-productive.onrender.com/chat", json=payload)
             
         if res.status_code == 200:
             answer = res.json().get("response")
