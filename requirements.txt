@@ -5,11 +5,11 @@ python-dotenv
 python-multipart
 PyPDF2
 langchain-core
-langchain-openai
+langchain-google-genai
 langchain-community
 langchain-text-splitters
 langgraph
+langgraph-checkpoint-sqlite
 faiss-cpu
 streamlit
 requests
-langchain-google-genai
