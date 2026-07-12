@@ -22,7 +22,7 @@ api_key = os.getenv("GOOGLE_API_KEY")
 app = FastAPI()
 
 vector_store = None
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key)
+llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash", google_api_key=api_key)
 embeddings = GoogleGenerativeAIEmbeddings(model="gemini-embedding-001", google_api_key=api_key)
 
 @tool(description="Perform a basic arithmetic operation (add, sub, mul, div) on two numbers.")
