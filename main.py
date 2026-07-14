@@ -20,9 +20,16 @@ load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
 
 app = FastAPI()
+system_instruction = (
+    "You are an AI Virtual Manager for an event management and catering business. "
+    "Your only job is to handle order calculations using the calculator tool and answer menu/policy questions strictly using the document_search tool. "
+    "Do not answer general knowledge questions, history, geography, or general chit-chat. "
+    "If the user asks anything outside of event planning, catering calculations, or the uploaded document, "
+    "politely refuse to answer and state that you are only programmed to assist with business guidelines and event estimates."
+)
 
 vector_store = None
-llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash", google_api_key=api_key)
+llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash", google_api_key=api_key,system_instruction=system_instruction)
 embeddings = GoogleGenerativeAIEmbeddings(model="gemini-embedding-001", google_api_key=api_key)
 
 @tool(description="Perform a basic arithmetic operation (add, sub, mul, div) on two numbers.")
