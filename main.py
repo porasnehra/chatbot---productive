@@ -111,4 +111,13 @@ async def chat_endpoint(request: ChatRequest):
     state = {"messages": [user_message]}
     result = chatbot.invoke(state, config=config)
     
-    return {"response": result["messages"][-1].content}
+    raw_content = result["messages"][-1].content
+    
+    if isinstance(raw_content, list):
+        answer = raw_content[0].get("text", str(raw_content))
+    elif isinstance(raw_content, dict):
+        answer = raw_content.get("text", str(raw_content))
+    else:
+        answer = str(raw_content)
+        
+    return {"response": answer}
